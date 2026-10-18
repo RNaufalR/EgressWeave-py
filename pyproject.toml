@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "egressweave-py"
+version = "0.1.0"
+description = "Network capability layer for AI agents: default-deny egress policies, capability discovery with verification evidence, structured diagnostics."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "RNaufalR" }]
+keywords = ["egress", "ssrf", "policy", "ai-agents", "proxy"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: System :: Networking",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.8", "mypy>=1.0", "build"]
+
+[project.urls]
+Homepage = "https://github.com/RNaufalR/EgressWeave-py"
+Repository = "https://github.com/RNaufalR/EgressWeave-py"
+Issues = "https://github.com/RNaufalR/EgressWeave-py/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/egressweave"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "UP", "B", "TRY", "I", "W"]
+ignore = [
+    # Single-exception validation contract: from_dict / from_json /
+    # normalize_hostname raise ValueError for every malformed input
+    # (wrong type included) so callers need exactly one except clause.
+    # Deliberate; documented in policy.py.
+    "TRY004",
+]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true

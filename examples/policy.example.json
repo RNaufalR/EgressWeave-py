@@ -1,0 +1,1 @@
+{"rules":[{"action":"allow","hosts":["api.example.com"],"methods":["GET","POST"],"ports":[443]},{"action":"deny","hosts":["internal.example.com"],"ports":[443]}],"version":"0.1"}
