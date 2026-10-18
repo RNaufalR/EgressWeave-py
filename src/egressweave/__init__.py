@@ -11,8 +11,15 @@ from egressweave.capabilities import (
     CapabilityRegistry,
     CapabilityStatus,
 )
+from egressweave.destination import (
+    DEFAULT_SCHEMES,
+    SCHEME_DEFAULT_PORTS,
+    Destination,
+    parse_destination,
+)
 from egressweave.errors import (
     CapabilityValidationError,
+    DestinationValidationError,
     EgressError,
     ErrorCode,
     PolicyValidationError,
@@ -24,20 +31,28 @@ from egressweave.policy import (
     PolicyDecision,
     normalize_hostname,
 )
+from egressweave.session import AuthorizationResult, Session
 
 __version__ = "0.1.0"
 
 __all__ = [
     "POLICY_SCHEMA_VERSION",
+    "AuthorizationResult",
     "Capability",
     "CapabilityRegistry",
     "CapabilityStatus",
     "CapabilityValidationError",
+    "DEFAULT_SCHEMES",
+    "Destination",
+    "DestinationValidationError",
     "EgressError",
     "EgressPolicy",
     "EgressRule",
     "ErrorCode",
     "PolicyDecision",
     "PolicyValidationError",
+    "SCHEME_DEFAULT_PORTS",
+    "Session",
     "normalize_hostname",
+    "parse_destination",
 ]

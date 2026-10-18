@@ -13,6 +13,7 @@ from egressweave.capabilities import (
     CapabilityRegistry,
     CapabilityStatus,
 )
+from egressweave.errors import CapabilityValidationError
 
 NOW = datetime(2026, 10, 18, 12, 0, tzinfo=timezone.utc)
 
@@ -140,3 +141,46 @@ def test_capability_is_immutable() -> None:
 
 def test_registry_schema_version() -> None:
     assert REGISTRY_SCHEMA_VERSION == "0.1"
+
+
+def test_evidence_must_be_str_not_attributeerror() -> None:
+    # EW-004: non-string evidence must raise the typed validation error,
+    # never a raw AttributeError (fail-closed contract).
+    with pytest.raises(CapabilityValidationError, match="evidence must be a string"):
+        Capability(
+            id="x",
+            kind="http-proxy",
+            status=CapabilityStatus.VERIFIED,
+            evidence=123,  # type: ignore[arg-type]
+            verified_at=NOW,
+        )
+
+
+def test_scope_must_be_str() -> None:
+    with pytest.raises(CapabilityValidationError, match="scope must be a string"):
+        Capability(
+            id="x",
+            kind="http-proxy",
+            status=CapabilityStatus.CONFIGURED,
+            scope=["not", "a", "string"],  # type: ignore[arg-type]
+        )
+
+
+def test_from_dict_rejects_non_string_evidence() -> None:
+    with pytest.raises(CapabilityValidationError, match="evidence must be a string"):
+        Capability.from_dict(
+            {
+                "id": "x",
+                "kind": "http-proxy",
+                "status": "verified",
+                "evidence": {"nested": "dict"},
+                "verified_at": NOW.isoformat(),
+            }
+        )
+
+
+def test_from_dict_rejects_non_string_scope() -> None:
+    with pytest.raises(CapabilityValidationError, match="scope must be a string"):
+        Capability.from_dict(
+            {"id": "x", "kind": "http-proxy", "status": "unknown", "scope": 42}
+        )

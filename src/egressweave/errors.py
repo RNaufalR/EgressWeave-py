@@ -57,6 +57,21 @@ class CapabilityValidationError(ValueError):
         super().__init__(f"{where}: {reason}")
 
 
+class DestinationValidationError(ValueError):
+    """A destination URL failed strict syntactic validation.
+
+    Raised instead of producing a partially-parsed destination
+    (fail-closed). ``where`` locates the problem (e.g. ``"url.host"``);
+    ``reason`` explains it. A ``ValueError`` subclass, same single-except
+    contract as the other validation errors.
+    """
+
+    def __init__(self, where: str, reason: str) -> None:
+        self.where = where
+        self.reason = reason
+        super().__init__(f"{where}: {reason}")
+
+
 class EgressError(Exception):
     """Typed failure for an EgressWeave-py mediated operation.
 

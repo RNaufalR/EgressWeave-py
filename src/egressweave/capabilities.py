@@ -63,6 +63,10 @@ class Capability:
             raise CapabilityValidationError(where, "kind must be a non-empty string")
         if not isinstance(self.status, CapabilityStatus):
             raise CapabilityValidationError(where, f"invalid status: {self.status!r}")
+        if not isinstance(self.evidence, str):
+            raise CapabilityValidationError(where, "evidence must be a string")
+        if not isinstance(self.scope, str):
+            raise CapabilityValidationError(where, "scope must be a string")
         verified_at = _check_timestamp(self.verified_at, where=where)
         if self.status is CapabilityStatus.VERIFIED:
             if not self.evidence.strip():
